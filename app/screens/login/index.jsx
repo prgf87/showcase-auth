@@ -82,6 +82,9 @@ export default function LoginScreen({ navigation }) {
     <View style={styles.container}>
       <View style={{ alignItems: "center" }}>
         <Text style={styles.heading}>Showcase</Text>
+        <Text style={styles.heading2}>
+          Your one stop shop for all things luxury
+        </Text>
       </View>
 
       <View style={styles.inputContainer}>
@@ -131,7 +134,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#fff",
   },
   modal: {
     position: "absolute",
@@ -152,12 +154,15 @@ const styles = StyleSheet.create({
     fontSize: 50,
     top: 75,
   },
+  heading2: {
+    fontSize: 12,
+    top: 85,
+  },
   p: {
     fontSize: 16,
     paddingBottom: 5,
   },
   input: {
-    backgroundColor: "white",
     paddingHorizontal: 15,
     paddingVertical: 2,
     borderRadius: 20,
@@ -180,7 +185,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   buttonOutline: {
-    backgroundColor: "white",
+    backgroundColor: "#fff",
     marginTop: 5,
     borderColor: "#0000B1",
     borderWidth: 2,
