@@ -1,3 +1,5 @@
+import React, { useState } from "react";
+
 import { StatusBar } from "expo-status-bar";
 import {
   KeyboardAvoidingView,
@@ -6,34 +8,82 @@ import {
   View,
 } from "react-native";
 import { Text, TextInput } from "react-native-paper";
+import { auth } from "../../../firebaseConfig";
+import { onAuthStateChanged } from "firebase/auth";
+import ErrorHandlerModal from "../../components/error";
+import Loading from "../../components/loading";
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    const uid = user.uid;
+    if (uid) console.log("User has signed in");
+  } else {
+    console.log("User has signed out");
+  }
+});
 
 export default function LoginScreen() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+
+  const signIn = async () => {
+    setLoading(true);
+    // try {
+    //   const res = await signInWithEmailAndPassword(auth, email, password).then(
+    //     (userCredential) => {
+    //       const user = userCredential.user;
+    //       if (user) {
+    //         setLoading(false);
+    //       }
+    //     }
+    //   );
+    //   console.log(res);
+    // } catch (err) {
+    //   setError(err);
+    // } finally {
+    //   setLoading(false);
+    // }
+  };
+  const register = async () => {
+    setLoading(true);
+    try {
+      const res = await createUserWithEmailAndPassword(
+        authFire,
+        email,
+        password
+      );
+      const { user } = res;
+      if (user) setLoading(false);
+    } catch (err) {
+      setError(err);
+      setLoading(false);
+    }
+  };
+
+  if (loading) return <Loading />;
+
+  if (error)
+    return (
+      <View style={styles.modal}>
+        <ErrorHandlerModal
+          error={error}
+          navigation={navigation}
+          visible={error}
+          setVisible={setError}
+        />
+      </View>
+    );
+
+  console.log(loading);
+
   return (
     <View style={styles.container}>
-      {/* <ErrorHandlerModal
-        error={error}
-        navigation={navigation}
-        visible={error}
-        setVisible={setError}
-      /> */}
       <View style={{ alignItems: "center" }}>
-        {/* <View style={styles.row}> */}
-        {/* <Image
-            source={logo}
-            style={{
-              resizeMode: "contain",
-              height: 120,
-              width: 120,
-              marginBottom: 20,
-              marginLeft: 0,
-              position: "absolute",
-              right: -38,
-            }}
-          /> */}
         <Text variant="titleLarge" style={styles.heading}>
           Showcase
         </Text>
-        {/* </View> */}
       </View>
 
       <View style={styles.inputContainer}>
@@ -43,15 +93,15 @@ export default function LoginScreen() {
         <TextInput
           mode="outlined"
           placeholder="Email"
-          // value={email}
-          // onChangeText={(text) => setEmail(text)}
+          value={email}
+          onChangeText={(text) => setEmail(text)}
           style={styles.inputText}
         />
         <TextInput
           mode="outlined"
           placeholder="Password"
-          // value={password}
-          // onChangeText={(text) => setPassword(text)}
+          value={password}
+          onChangeText={(text) => setPassword(text)}
           style={styles.inputText}
           secureTextEntry
         />
@@ -60,14 +110,11 @@ export default function LoginScreen() {
       <View style={styles.buttonContainer}>
         <KeyboardAvoidingView behavior="padding">
           <View>
-            <TouchableOpacity
-              // onPress={signIn}
-              style={styles.button}
-            >
+            <TouchableOpacity onPress={signIn} style={styles.button}>
               <Text style={styles.buttonText}>Login</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              // onPress={register}
+              onPress={register}
               style={[styles.button, styles.buttonOutline]}
             >
               <Text style={styles.buttonOutlineText}>Register</Text>
@@ -87,6 +134,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#fff",
+  },
+  modal: {
+    position: "absolute",
+    left: 0,
+    top: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 10,
   },
   inputContainer: {
     width: "85%",
