@@ -4,6 +4,17 @@ import LoginScreen from "./screens/login";
 import { auth } from "../firebaseConfig";
 import { Redirect } from "expo-router";
 import HomeScreen from "./screens/home";
+import { onAuthStateChanged } from "firebase/auth";
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    console.log(user);
+    const uid = user.uid;
+    if (uid) console.log("User has signed in");
+  } else {
+    console.log("User has signed out");
+  }
+});
 
 export default function App() {
   const { user } = auth;

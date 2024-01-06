@@ -9,18 +9,12 @@ import {
 } from "react-native";
 import { Text, TextInput } from "react-native-paper";
 import { auth } from "../../../firebaseConfig";
-import { onAuthStateChanged } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 import ErrorHandlerModal from "../../components/error";
 import Loading from "../../components/loading";
-
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    const uid = user.uid;
-    if (uid) console.log("User has signed in");
-  } else {
-    console.log("User has signed out");
-  }
-});
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
@@ -30,38 +24,34 @@ export default function LoginScreen() {
 
   const signIn = async () => {
     setLoading(true);
-    // try {
-    //   const res = await signInWithEmailAndPassword(auth, email, password).then(
-    //     (userCredential) => {
-    //       const user = userCredential.user;
-    //       if (user) {
-    //         setLoading(false);
-    //       }
-    //     }
-    //   );
-    //   console.log(res);
-    // } catch (err) {
-    //   setError(err);
-    // } finally {
-    //   setLoading(false);
-    // }
+    try {
+      await signInWithEmailAndPassword(auth, email, password).then(
+        (userCredential) => {
+          const user = userCredential.user;
+          if (user) {
+            console.log(user);
+            setLoading(false);
+          }
+        }
+      );
+    } catch (err) {
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
   };
   const register = async () => {
-    // setLoading(true);
-    setError(true);
+    setLoading(true);
 
-    // try {
-    //   const res = await createUserWithEmailAndPassword(
-    //     authFire,
-    //     email,
-    //     password
-    //   );
-    //   const { user } = res;
-    //   if (user) setLoading(false);
-    // } catch (err) {
-    //   setError(err);
-    //   setLoading(false);
-    // }
+    try {
+      const res = await createUserWithEmailAndPassword(auth, email, password);
+      const { user } = res;
+      if (user) setLoading(false);
+    } catch (err) {
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (loading) return <Loading />;
