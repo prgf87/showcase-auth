@@ -26,7 +26,7 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
-export default function LoginScreen() {
+export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -50,9 +50,9 @@ export default function LoginScreen() {
       setLoading(false);
     }
   };
+
   const register = async () => {
     setLoading(true);
-
     try {
       const res = await createUserWithEmailAndPassword(auth, email, password);
       const { user } = res;
@@ -78,14 +78,10 @@ export default function LoginScreen() {
       </View>
     );
 
-  console.log(loading);
-
   return (
     <View style={styles.container}>
       <View style={{ alignItems: "center" }}>
-        <Text variant="titleLarge" style={styles.heading}>
-          Showcase
-        </Text>
+        <Text style={styles.heading}>Showcase</Text>
       </View>
 
       <View style={styles.inputContainer}>
@@ -154,6 +150,7 @@ const styles = StyleSheet.create({
   heading: {
     fontStyle: "italic",
     fontSize: 50,
+    top: 75,
   },
   p: {
     fontSize: 16,
