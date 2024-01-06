@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 import LoginScreen from "./screens/login";
@@ -6,18 +7,21 @@ import { Redirect } from "expo-router";
 import HomeScreen from "./screens/home";
 import { onAuthStateChanged } from "firebase/auth";
 
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    console.log(user);
-    const uid = user.uid;
-    if (uid) console.log("User has signed in");
-  } else {
-    console.log("User has signed out");
-  }
-});
-
 export default function App() {
-  const { user } = auth;
+  const [user, setUser] = useState();
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      console.log(user);
+      const uid = user.uid;
+      if (uid) {
+        console.log("User has signed in");
+        setUser(user);
+      }
+    } else {
+      console.log("User has signed out");
+    }
+  });
 
   if (!user) {
     return (
