@@ -11,10 +11,20 @@ import { Text, TextInput } from "react-native-paper";
 import { auth } from "../../../firebaseConfig";
 import {
   createUserWithEmailAndPassword,
+  onAuthStateChanged,
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import ErrorHandlerModal from "../../components/error";
 import Loading from "../../components/loading";
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    const uid = user.uid;
+    if (uid) console.log("User has signed in");
+  } else {
+    console.log("User has signed out");
+  }
+});
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
