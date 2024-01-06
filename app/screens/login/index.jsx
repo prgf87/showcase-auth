@@ -32,14 +32,13 @@ export default function LoginScreen({ navigation }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
-  const signIn = async () => {
+  async function signIn() {
     setLoading(true);
     try {
       await signInWithEmailAndPassword(auth, email, password).then(
         (userCredential) => {
           const user = userCredential.user;
           if (user) {
-            console.log(user);
             setLoading(false);
           }
         }
@@ -49,9 +48,9 @@ export default function LoginScreen({ navigation }) {
     } finally {
       setLoading(false);
     }
-  };
+  }
 
-  const register = async () => {
+  async function register() {
     setLoading(true);
     try {
       const res = await createUserWithEmailAndPassword(auth, email, password);
@@ -62,7 +61,7 @@ export default function LoginScreen({ navigation }) {
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   if (loading) return <Loading />;
 

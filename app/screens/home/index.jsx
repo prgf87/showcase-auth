@@ -15,7 +15,6 @@ export default function HomeScreen() {
       <Button
         mode="contained"
         onPress={() => {
-          console.log("signout");
           signOut(authFire);
         }}
       >
