@@ -47,19 +47,21 @@ export default function LoginScreen() {
     // }
   };
   const register = async () => {
-    setLoading(true);
-    try {
-      const res = await createUserWithEmailAndPassword(
-        authFire,
-        email,
-        password
-      );
-      const { user } = res;
-      if (user) setLoading(false);
-    } catch (err) {
-      setError(err);
-      setLoading(false);
-    }
+    // setLoading(true);
+    setError(true);
+
+    // try {
+    //   const res = await createUserWithEmailAndPassword(
+    //     authFire,
+    //     email,
+    //     password
+    //   );
+    //   const { user } = res;
+    //   if (user) setLoading(false);
+    // } catch (err) {
+    //   setError(err);
+    //   setLoading(false);
+    // }
   };
 
   if (loading) return <Loading />;
